@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "@prisma/client": "^7.3.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "ioredis": "^5.9.2",
+    "nanoid": "^5.1.6",
+    "tsc-node": "^0.0.3",
+    "typescript": "^5.9.3",
+    "yup": "^1.7.1"
+  },
+  "name": "xposure",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.10",
+    "prisma": "^7.3.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
