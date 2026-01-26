@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../src/generated/prisma"
+  binaryTargets = ["native", "darwin-arm64", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  // url      = env("DATABASE_URL")
+}
+
+model Content {
+  id        Int      @unique @default(autoincrement())
+  category  String
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Subscriber {
+  id            Int             @unique @default(autoincrement())
+  msisdn        String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now())
+  subscriptions Subscriptions[]
+}
+
+model Subscriptions {
+  id                   Int          @unique @default(autoincrement())
+  subscriberId         Int
+  subscriptionId       String
+  planId               String
+  isActive             Boolean      @default(true)
+  expiry               DateTime
+  initiated            Boolean      @default(true)
+  confirmed            Boolean      @default(false)
+  initiationSuccessful Boolean
+  //  Boolean
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @default(now())
+  meta                 Json?
+  plan                 ServicePlans @relation(fields: [planId], references: [uid])
+  subscriber           Subscriber   @relation(fields: [subscriberId], references: [id])
+}
+
+model ServicePlans {
+  id            Int             @default(autoincrement())
+  uid           String          @unique //serviceId 
+  interval      Int
+  pricePoint    Int
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now())
+  subscriptions Subscriptions[]
+}
