@@ -1,7 +1,7 @@
 import {Router} from "express"
-import { prisma } from "../db"
+import { MTNMenuController } from "./content-manager/mtn/menu.index"
 
 export const  base_router = Router()
 
-prisma
+base_router.post("/mtn", MTNMenuController)
 
