@@ -14,7 +14,7 @@
     "yup": "^1.7.1"
   },
   "scripts": {
-    "prestart": "npx prisma db push --accept-data-loss",
+    // "prestart": "npx prisma db push --accept-data-loss",
     "start": "bun --watch src/app.ts"
   },
   "name": "xposure",
