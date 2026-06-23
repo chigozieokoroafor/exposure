@@ -58,3 +58,16 @@ model ServicePlans {
   updatedAt     DateTime        @default(now())
   subscriptions Subscriptions[]
 }
+
+model Menu {
+  id         Int      @id @default(autoincrement())
+  name       String // Renamed from 'menu' to avoid conflicts
+  stateId    String      @unique
+  menuString String
+  // Self-relation using id
+  parentId   String?
+  parent     Menu?    @relation("MenuHierarchy", fields: [parentId], references: [stateId])
+  subMenus   Menu[]   @relation("MenuHierarchy")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

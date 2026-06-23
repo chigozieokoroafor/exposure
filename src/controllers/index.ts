@@ -1,7 +1,7 @@
 import {Router} from "express"
-import { MTNMenuController } from "./content-manager/mtn/menu.index"
+import { contentRouter } from "./content-manager"
 
 export const  base_router = Router()
 
-base_router.post("/mtn", MTNMenuController)
+base_router.use("/content", contentRouter)
 

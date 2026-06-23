@@ -2,10 +2,11 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
+    "axios": "^1.18.1",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "ioredis": "^5.9.2",
+    "ioredis": "^5.11.1",
     "nanoid": "^5.1.6",
     "pg": "^8.17.2",
     "prisma-extension-pagination": "^0.7.6",
@@ -14,8 +15,8 @@
     "yup": "^1.7.1"
   },
   "scripts": {
-    // "prestart": "npx prisma db push --accept-data-loss",
-    "start": "bun --watch src/app.ts"
+    "start": "bun --watch app.ts",
+    "prestart": "npx prisma db push --accept-data-loss && sleep 1 && rm -rf src/generated && sleep 1 && npx prisma generate"
   },
   "name": "xposure",
   "module": "index.ts",
