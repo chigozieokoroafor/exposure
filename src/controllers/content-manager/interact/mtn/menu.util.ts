@@ -28,9 +28,10 @@ export async function validateInteractionDTO(body: any) {
 }
 
 export async function getMenu(dto: TInteractionDTO) {
-    const stateId = await StateManager.handleStateChange(dto?.msisdn!, dto?.ussdString!)
+    
     let menu: string
     try {
+        const stateId = await StateManager.handleStateChangeWithMessagetypecheck(dto?.msisdn!, dto?.ussdString!, dto.messageType)
         menu = await StateManager.getState(stateId)
 
     } catch (error: any) {

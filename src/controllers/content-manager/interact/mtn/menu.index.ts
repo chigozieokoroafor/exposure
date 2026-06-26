@@ -8,7 +8,7 @@ import { getMenu, validateInteractionDTO } from "./menu.util"
 export async function MTNMenuController(req: Request, res: Response, next: NextFunction) {
 
   try {
-    console.log("contentCallback:::test:::", req?.body)
+    // console.log("contentCallback:::test:::", req?.body)
 
     // const option_ = req.body.ussdString
     // switch (option_) {
@@ -89,7 +89,7 @@ export async function MTNMenuController(req: Request, res: Response, next: NextF
 
   } catch (error) {
 
-    console.log("eeee===> ", error)
+    // console.log("eeee===> ", error)
     next(new InternalError(error))
   }
 

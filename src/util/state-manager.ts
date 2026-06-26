@@ -5,30 +5,73 @@ import { InternalError } from "./errorHandler";
 
 export namespace StateManager {
 
-    export async function handleStateChange(sessionId: string, stateId: string) {
+    // export async function handleStateChange(sessionId: string, stateId: string) {
+    //     const sessionKey = RedisController.SCOPE_KEY.session(sessionId);
+    //     const userExistingState = await RedisController.getKeyValue(sessionKey);
+    //     let userState: { previous: string | null, current: string };
+    //     if (userExistingState) {
+    //         userState = JSON.parse(userExistingState);
+
+    //         // Generate the new chain by appending the input to the CURRENT state
+    //         const newCurrent = RedisController.SCOPE_KEY.stateIdChain(userState.current, stateId);
+
+    //         userState.previous = userState.current;
+    //         userState.current = newCurrent;
+    //     } else {
+    //         // First time the user interacts, start the chain
+    //         userState = {
+    //             previous: null,
+    //             current: stateId // e.g. "44004"
+    //         };
+    //     }
+
+    //     // console.log("state ===> ", userState)
+    //     // Save using the proper sessionKey
+    //     await RedisController.setKey(sessionKey, userState, 50 * 5);
+
+    //     return userState.current; // It's usually helpful to return the generated chain
+    // }
+
+    export async function handleStateChangeWithMessagetypecheck(sessionId: string, stateId: string, messageType: number = 0) {
         const sessionKey = RedisController.SCOPE_KEY.session(sessionId);
         const userExistingState = await RedisController.getKeyValue(sessionKey);
         let userState: { previous: string | null, current: string };
-        if (userExistingState) {
-            userState = JSON.parse(userExistingState);
-            
-            // Generate the new chain by appending the input to the CURRENT state
-            const newCurrent = RedisController.SCOPE_KEY.stateIdChain(userState.current, stateId);
-            
-            userState.previous = userState.current;
-            userState.current = newCurrent;
-        } else {
+
+        let newCurrent
+
+        if (!userExistingState || messageType == 0) {
             // First time the user interacts, start the chain
             userState = {
                 previous: null,
                 current: stateId // e.g. "44004"
             };
+        } else {
+            userState = JSON.parse(userExistingState);
+
+            switch (stateId) {
+                case "99":
+                    throw new InternalError(null, "Thank you for participating, we look forward to seeing you again")
+                    
+                case "98":
+                    newCurrent = userState.previous!
+                    break
+                default:
+                    
+                    newCurrent = RedisController.SCOPE_KEY.stateIdChain(userState.current, stateId);
+
+                    // console.log("indefault ===> ", newCurrent)
+            }
+
+            // newCurrent = RedisController.SCOPE_KEY.stateIdChain(userState.current, stateId);
+
+            userState.previous = userState.current;
+            userState.current = newCurrent;
         }
 
-        console.log("state ===> ",userState)
+        // console.log("state ===> ", userState)
         // Save using the proper sessionKey
         await RedisController.setKey(sessionKey, userState, 50 * 5);
-        
+
         return userState.current; // It's usually helpful to return the generated chain
     }
 
@@ -61,7 +104,7 @@ export namespace StateManager {
         )
 
         if (!menu) {
-            throw new InternalError(null,"Whoops, wrong option selected")
+            throw new InternalError(null, "Whoops, wrong option selected")
         }
 
         await setState(stateId, menu.menuString)
