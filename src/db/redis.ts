@@ -15,6 +15,11 @@ export const redis = new Redis({
     maxRetriesPerRequest: null,
 });
 
+redis.on("error", (error) => {
+    console.error("Redis connection error:", error);
+    console.error("Error details:", error?.message, error?.stack);
+});
+
 
 
 export namespace RedisController {
